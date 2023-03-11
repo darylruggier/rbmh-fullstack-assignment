@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <div className="flex flex-col w-3/4 h-96 justify-start items-center shadow-2xl rounded-lg">
+      <div className="flex flex-col w-3/4 h-96 justify-start items-center sm:shadow-2xl rounded-lg">
         <Image className="py-8" src="/rbmh-logo.png" width={150} height={150} alt="Red Bull Media House" />
         <input value={email} type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
         <input value={password} type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />

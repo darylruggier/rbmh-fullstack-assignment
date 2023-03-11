@@ -66,7 +66,7 @@ export default function Register() {
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <Navbar />
-      <div className="flex flex-col w-3/4 h-2/3 justify-start items-center shadow-2xl rounded-lg">
+      <div className="flex flex-col w-3/4 h-2/3 justify-start items-center sm:shadow-2xl rounded-lg">
         <h1 className="text-3xl lg:text-4xl font-bold pt-9 pb-6 text-center">Create your account</h1>
         <input type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="Email" onChange={e => setEmail(e.target.value)} />
         <input type="text" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="First Name" onChange={e => setFirstName(e.target.value)} />
