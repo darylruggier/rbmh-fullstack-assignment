@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import Link from 'next/link';
 
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
@@ -305,7 +306,10 @@ export default function Profile() {
             </div>
           </div>
         ) : (
-          <p className="text-2xl font-bold">You are not logged in!<br/><a href="/"><Button label="Log In" /></a></p>
+          <div className="flex flex-col items-center justify-center">
+              <p className="text-2xl mt-8">You are not logged in!</p>
+              <Link href="/"><Button label="Log In" /></Link>
+            </div>
         )}
       </div>
     </div>
