@@ -7,17 +7,52 @@ export default function Register() {
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
 
-  const handleRegister = () => {
+  const [isEmailTaken, setEmailIsTaken] = useState<boolean>(false);
 
+  // initially setting these to false such that the error message is shown once the button is clicked
+  const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true); 
+  const [areInputsValid, setAreInputsValid] = useState<boolean>(true); 
+
+
+  const handleRegister = async () => {
+    if (!email || !firstName || !country || !password || !confirmPass) {
+      return setAreInputsValid(false);
+    }
+    setAreInputsValid(true);
+
+    if (password !== confirmPass) {
+      return setDoPasswordsMatch(false);
+    } else {
+      setDoPasswordsMatch(true);
+      // create user
+      const res = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          first_name: firstName,
+          country,
+          password
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (res.status === 409) { // Conflict - user with the specified email already exists
+        setEmailIsTaken(true);
+      } else {
+        setEmailIsTaken(false);
+      };
+
+      console.log("res", res);
+    }
   };
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       <div className="flex flex-col w-3/4 h-2/3 justify-start items-center border-black border rounded-lg">
         <h1 className="text-4xl pt-10 pb-8">Red Bull Case Assignment</h1>
-        <input type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Email" />
-        <input type="text" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="First Name" />
-        <select className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" onChange={(e) => setCountry(e.target.value)}>
+        <input type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Email" onChange={e => setEmail(e.target.value)} />
+        <input type="text" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="First Name" onChange={e => setFirstName(e.target.value)} />
+        <select defaultValue={""} className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" onChange={(e) => setCountry(e.target.value)}>
           <option value="">Country</option>
           <option value="Afghanistan">Afghanistan</option>
           <option value="Albania">Albania</option>
@@ -261,7 +296,10 @@ export default function Register() {
         </select>
         <input type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <input type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Confirm Password" onChange={(e) => setConfirmPass(e.target.value)} />
-        <button className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 active:scale-[.98]" onClick={handleRegister}>Register</button>
+        { !areInputsValid && <p className="text-sm text-red-400 pt-6">Please fill in all of the fields</p> }
+        { !doPasswordsMatch && <p className="text-sm text-red-400 pt-6">Passwords do not match</p> }
+        { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
+        <button className="w-3/4 h-12 border-black border rounded-lg mt-4 mb-6 active:scale-[.98]" onClick={handleRegister}>Register</button>
       </div>
     </div>
   )
