@@ -18,7 +18,7 @@ export default function Profile() {
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   const handleUpdateProfile = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/verify-password`, {
+    const res = await fetch(`/api/verify-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ current_password: currentPassword })
@@ -26,7 +26,7 @@ export default function Profile() {
 
     if (res.status === 401) return setDoPasswordsMatch(false);
     if (res.status === 200) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/update-profile`, {
+      const res = await fetch(`/api/update-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ first_name: firstName, country, new_password: newPassword })
@@ -174,7 +174,7 @@ export default function Profile() {
                 <option value="Kyrgyzstan">Kyrgyzstan</option>
                 <option value="Lao">Lao People's Democratic Republic</option>
                 <option value="Latvia">Latvia</option>
-                <option value="Lebanon" selected>Lebanon</option>
+                <option value="Lebanon">Lebanon</option>
                 <option value="Lesotho">Lesotho</option>
                 <option value="Liberia">Liberia</option>
                 <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>

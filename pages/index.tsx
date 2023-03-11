@@ -28,7 +28,6 @@ export default function Home() {
         setInvalidCredentials(true);
       } else if (login?.status === 200) {
         setInvalidCredentials(false);
-        window.open(`/profile`, '_self');
       }
     } catch (error) {
       alert(error);

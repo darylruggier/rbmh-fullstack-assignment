@@ -36,7 +36,7 @@ export default function Register() {
       return setDoPasswordsMatch(false);
     } else {
       setDoPasswordsMatch(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/register`, {
+      const res = await fetch(`/api/register`, {
         method: 'POST',
         body: JSON.stringify({
           email,
@@ -191,7 +191,7 @@ export default function Register() {
           <option value="Kyrgyzstan">Kyrgyzstan</option>
           <option value="Lao">Lao People's Democratic Republic</option>
           <option value="Latvia">Latvia</option>
-          <option value="Lebanon" selected>Lebanon</option>
+          <option value="Lebanon">Lebanon</option>
           <option value="Lesotho">Lesotho</option>
           <option value="Liberia">Liberia</option>
           <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
