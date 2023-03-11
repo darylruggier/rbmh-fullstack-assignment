@@ -67,7 +67,7 @@ export default function Register() {
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <Navbar />
       <div className="flex flex-col w-3/4 h-2/3 justify-start items-center shadow-2xl rounded-lg">
-        <h1 className="text-4xl font-bold pt-9 pb-6">Create your account</h1>
+        <h1 className="text-3xl lg:text-4xl font-bold pt-9 pb-6 text-center">Create your account</h1>
         <input type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="Email" onChange={e => setEmail(e.target.value)} />
         <input type="text" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="First Name" onChange={e => setFirstName(e.target.value)} />
         <select defaultValue={""} className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" onChange={(e) => setCountry(e.target.value)}>
@@ -314,7 +314,7 @@ export default function Register() {
         </select>
         <input required type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <input type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" placeholder="Confirm Password" onChange={(e) => setConfirmPass(e.target.value)} />
-        { !areInputsValid && <p className="text-sm text-red-400 pt-6">Please fill in all of the required fields</p> }
+        { !areInputsValid && <p className="text-xs lg:text-sm text-red-400 pt-6">Please fill in all of the required fields</p> }
         { !doPasswordsMatch && <p className="text-sm text-red-400 pt-6">Passwords do not match</p> }
         { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
         { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }

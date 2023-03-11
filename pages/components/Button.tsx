@@ -5,7 +5,7 @@ interface Props {
 
 const Button: React.FC<Props> = ({ label, onClick }) => {
   return (
-    <button className="bg-rb-red-inactive text-white text-sm font-medium px-8 py-3.5 rounded-md hover:bg-rb-red-active hover:duration-100 sm:px-6" onClick={onClick}> 
+    <button className="px-6 bg-rb-red-inactive text-white text-sm font-medium py-3.5 rounded-md hover:bg-rb-red-active hover:duration-100 sm:px-8" onClick={onClick}> 
       {label}
     </button>
   );

@@ -43,7 +43,7 @@ export default function Profile() {
   return (
     <div className="h-screen w-screen flex flex-col items-center">
       <Navbar />
-      <div className="flex flex-col w-1/2 h-3/4 mt-32 justify-start items-center rounded-xl shadow-xl">
+      <div className="flex flex-col w-full h-3/4 mt-32 justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl lg:w-1/3 md:w-1/2">
         <h1 className="text-5xl font-normal text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
         {session? (
           <div className="text-center">
