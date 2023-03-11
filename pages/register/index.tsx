@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "../components/Navbar";
 
 export default function Register() {
   const [email, setEmail] = useState<string>("");
@@ -7,18 +8,29 @@ export default function Register() {
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
 
-  const [isEmailTaken, setEmailIsTaken] = useState<boolean>(false);
+  const [isEmailTaken, setIsEmailTaken] = useState<boolean>(false);
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [accountSuccessfullyCreated, setAccountSuccessfullyCreated] = useState<boolean>(false);
 
   // initially setting these to false such that the error message is shown once the button is clicked
   const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true); 
   const [areInputsValid, setAreInputsValid] = useState<boolean>(true); 
 
 
+  const isInvalidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return !emailRegex.test(email);
+  }
+
   const handleRegister = async () => {
-    if (!email || !firstName || !country || !password || !confirmPass) {
+    if (!email || !password || !confirmPass) {
       return setAreInputsValid(false);
     }
+
     setAreInputsValid(true);
+
+    if (isInvalidEmail(email)) return setIsEmailValid(false);
+    setIsEmailValid(true);
 
     if (password !== confirmPass) {
       return setDoPasswordsMatch(false);
@@ -36,20 +48,27 @@ export default function Register() {
         headers: { "Content-Type": "application/json" }
       });
 
-      if (res.status === 409) { // Conflict - user with the specified email already exists
-        setEmailIsTaken(true);
-      } else {
-        setEmailIsTaken(false);
+      if (res.status === 200) {
+        // redirect to login on successful resgistration
+        setAccountSuccessfullyCreated(true);
+        setTimeout(() => {
+          window.open('/', '_self');
+        }, 500);
       };
 
-      console.log("res", res);
+      if (res.status === 409) { // Conflict - user with the specified email already exists
+        setIsEmailTaken(true);
+      } else {
+        setIsEmailTaken(false);
+      };
     }
   };
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
-      <div className="flex flex-col w-3/4 h-2/3 justify-start items-center border-black border rounded-lg">
-        <h1 className="text-4xl pt-10 pb-8">Red Bull Case Assignment</h1>
+    <div className="h-screen w-screen flex flex-col justify-center items-center">
+      <Navbar />
+      <div className="flex flex-col w-3/4 h-2/3 justify-start items-center shadow-2xl rounded-lg">
+        <h1 className="text-4xl font-bold pt-9 pb-6">Create your account</h1>
         <input type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Email" onChange={e => setEmail(e.target.value)} />
         <input type="text" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="First Name" onChange={e => setFirstName(e.target.value)} />
         <select defaultValue={""} className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" onChange={(e) => setCountry(e.target.value)}>
@@ -294,12 +313,14 @@ export default function Register() {
           <option value="Zambia">Zambia</option>
           <option value="Zimbabwe">Zimbabwe</option>
         </select>
-        <input type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input required type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <input type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2" placeholder="Confirm Password" onChange={(e) => setConfirmPass(e.target.value)} />
-        { !areInputsValid && <p className="text-sm text-red-400 pt-6">Please fill in all of the fields</p> }
+        { !areInputsValid && <p className="text-sm text-red-400 pt-6">Please fill in all of the required fields</p> }
         { !doPasswordsMatch && <p className="text-sm text-red-400 pt-6">Passwords do not match</p> }
         { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
-        <button className="w-3/4 h-12 border-black border rounded-lg mt-4 mb-6 active:scale-[.98]" onClick={handleRegister}>Register</button>
+        { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
+        { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
+        <button className="w-32 h-12 border-black border rounded-full mt-5 mb-6 active:scale-[.98]" onClick={handleRegister}>Register</button>
       </div>
     </div>
   )

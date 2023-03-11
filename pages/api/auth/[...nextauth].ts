@@ -53,5 +53,13 @@ export default NextAuth({
         return null;
       },
     }),
-  ]
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token, user }) {
+      return { ...session, user: token };
+    },
+  }
 });
