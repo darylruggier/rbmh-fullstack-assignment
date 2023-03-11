@@ -6,7 +6,7 @@ import { hashPassword } from '../../lib/hashAndSalt';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-      const user = await prisma.User.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
           email: req.body.email,
         }
@@ -16,7 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ msg: "Invalid email or password" });
       };
 
-      const isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
+
+      let isPasswordValid = false;
+      if (user.password) {
+        isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
+      };
+
       if (!isPasswordValid) {
         return res.status(401).json({ msg: "Invalid email or password" });
       } else {
