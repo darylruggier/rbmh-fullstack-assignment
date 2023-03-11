@@ -1,6 +1,7 @@
 import { NextComponentType } from "next";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 const Navbar: React.FC = () => {
   const { data: session } = useSession();
@@ -14,7 +15,7 @@ const Navbar: React.FC = () => {
       <ul className="flex justify-between p-4">
         <li>
           <Link href="/">
-            <img src="../../assets/rbmh-logo.png" alt="Red Bull Media House" />
+            <Image src="/rbmh-logo.png" alt="Red Bull Media House" width={100} height={100} />
           </Link>
         </li>
         { session && (
