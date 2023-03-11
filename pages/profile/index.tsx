@@ -18,7 +18,7 @@ export default function Profile() {
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   const handleUpdateProfile = async () => {
-    const res = await fetch("/api/verify-password", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/verify-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ current_password: currentPassword })
@@ -26,7 +26,7 @@ export default function Profile() {
 
     if (res.status === 401) return setDoPasswordsMatch(false);
     if (res.status === 200) {
-      const res = await fetch("/api/update-profile", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/update-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ first_name: firstName, country, new_password: newPassword })

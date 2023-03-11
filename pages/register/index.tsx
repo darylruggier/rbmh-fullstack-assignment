@@ -36,8 +36,7 @@ export default function Register() {
       return setDoPasswordsMatch(false);
     } else {
       setDoPasswordsMatch(true);
-      // create user
-      const res = await fetch('http://localhost:3000/api/register', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/register`, {
         method: 'POST',
         body: JSON.stringify({
           email,
