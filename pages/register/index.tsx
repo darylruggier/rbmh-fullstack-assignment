@@ -70,8 +70,8 @@ export default function Register() {
         <title>Red Bull Case Assignment - Register</title>
       </Head>
       <Navbar />
-      <div className="w-2/3 h-auto flex flex-col justify-start items-center sm:shadow-2xl xl:w-1/3">
-        <h1 className="text-2xl lg:text-4xl font-bold pt-9 pb-6 text-center">Join Red Bull Today</h1>
+      <div className="w-5/6 h-auto flex flex-col justify-start items-center sm:shadow-2xl sm:mt-4 xl:w-1/3">
+        <h1 className="text-2xl lg:text-4xl font-bold text-center sm:mt-8">Join Red Bull Today</h1>
         <div className="flex flex-col self-center items-center">
           <div className="flex flex-col w-5/6 mt-4">
             <label htmlFor="email" className="text-sm font-medium self-start text-[#1A1919]">Email</label>
@@ -83,7 +83,7 @@ export default function Register() {
           </div>
           <div className="flex flex-col w-5/6 mt-4">
             <label htmlFor="country" className="text-sm font-medium self-start text-[#1A1919]">Country of Residence</label>
-            <select id="country" defaultValue="Afghanistan" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
+            <select id="country" defaultValue="" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 appearance-none" onChange={(e) => setCountry(e.target.value)}>
               <option value="">Country</option>
               <option value="Afghanistan">Afghanistan</option>
               <option value="Albania">Albania</option>

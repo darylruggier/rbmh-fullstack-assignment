@@ -60,7 +60,13 @@ export default function Profile() {
       setSuccessMessage(true);
       setCurrentPassword("");
       setNewPassword("");
+      reloadSession();
     }
+  };
+
+  const reloadSession = () => {
+    const event = new Event("visibilitychange");
+    document.dispatchEvent(event);
   };
 
   return (
@@ -69,7 +75,7 @@ export default function Profile() {
         <title>Red Bull Media House Case Assignment - Profile</title>
       </Head>
       <Navbar />
-      <div className="flex flex-col w-full h-auto mt-16 justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-32 md:w-1/2">
+      <div className="flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
         {session? (
           <div className="w-5/6 text-center">
             <h1 className="text-5xl font-normal text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
@@ -81,8 +87,8 @@ export default function Profile() {
               </div>
               <div className="flex flex-col w-full">
                 <label htmlFor="country" className="text-sm font-medium self-start text-[#1A1919] mt-4">Country</label>
-                <select id="country" defaultValue={session.user.country ?? ""} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
-                  <option value="">Country</option>
+                <select defaultValue={session.user.country ?? "default"} id="country" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 appearance-none" onChange={(e) => setCountry(e.target.value)}>
+                  <option value="default">Country</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Albania">Albania</option>
                   <option value="Algeria">Algeria</option>

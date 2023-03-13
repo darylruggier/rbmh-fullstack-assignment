@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="absolute top-0 w-full">
+    <nav className="top-0 w-full">
       <ul className={`flex p-4 ${session ? 'justify-between' : 'justify-center'}`}>
         <li>
           <Link href={session ? "/profile" : "/"}>
