@@ -14,8 +14,11 @@ export default function Home() {
   const [showPassword, setShowConfirmPass] = useState<boolean>(false);
   const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const areInputsInvalid = email === "" || password === "" || !emailRegex.test(email);
+
 
   const { data: session } = useSession();
   if (session && session.user) {
@@ -23,7 +26,7 @@ export default function Home() {
   }
 
 
-  const handleLogin = async (e: React.ChangeEvent<any>) => {
+  const handleLogin = async () => {
     try {
       const login = await signIn('credentials', {
         redirect: false,
@@ -39,6 +42,8 @@ export default function Home() {
       }
     } catch (error) {
       alert(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,8 +68,8 @@ export default function Home() {
             <span className="text-sm mt-2 font-medium self-start text-[#737477] hover:cursor-pointer"><Link href="/forgot-password">Forgot Password?</Link></span>
           </div>
           { invalidCredentials && <p className="text-sm text-red-400 pt-3">Invalid credentials</p> }
-          <LargeButton disabled={areInputsInvalid} label="Login" onClick={(e) => handleLogin(e)} />
-          <p className="text-md pt-6 pb-4">Not a user? <Link href="/register" className=""><span className="text-rb-red-active">Sign up!</span></Link></p>
+          <LargeButton disabled={areInputsInvalid} label="Login" isLoading={isLoading} onClick={handleLogin} />
+          <p className="text-md pt-6 pb-5">Not a user? <Link href="/register" className=""><span className="text-rb-red-active">Sign up!</span></Link></p>
         </div>
       </div>
     </div>

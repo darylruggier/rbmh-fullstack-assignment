@@ -22,6 +22,8 @@ export default function Register() {
 
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const isInvalidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return !emailRegex.test(email);
@@ -30,40 +32,47 @@ export default function Register() {
   const areInputsInvalid = !email || !password || !confirmPass || isInvalidEmail(email);
 
   const handleRegister = async () => {
-    if (areInputsInvalid) return;
+    setIsLoading(true);
+    try {
+      if (areInputsInvalid) return;
 
-    if (isInvalidEmail(email)) return setIsEmailValid(false);
-    setIsEmailValid(true);
+      if (isInvalidEmail(email)) return setIsEmailValid(false);
+      setIsEmailValid(true);
 
-    if (password !== confirmPass) {
-      return setDoPasswordsMatch(false);
-    } else {
-      setDoPasswordsMatch(true);
-      const res = await fetch(`/api/register`, {
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-          first_name: firstName,
-          country,
-          password
-        }),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      if (res.status === 200) {
-        // redirect to login on successful resgistration
-        setAccountSuccessfullyCreated(true);
-        setTimeout(() => {
-          window.open('/', '_self');
-        }, 500);
-      };
-
-      if (res.status === 409) { // Conflict - user with the specified email already exists
-        setIsEmailTaken(true);
+      if (password !== confirmPass) {
+        return setDoPasswordsMatch(false);
       } else {
-        setIsEmailTaken(false);
-      };
-    }
+        setDoPasswordsMatch(true);
+        const res = await fetch(`/api/register`, {
+          method: 'POST',
+          body: JSON.stringify({
+            email,
+            first_name: firstName,
+            country,
+            password
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (res.status === 200) {
+          // redirect to login on successful resgistration
+          setAccountSuccessfullyCreated(true);
+          setTimeout(() => {
+            window.open('/', '_self');
+          }, 500);
+        };
+
+        if (res.status === 409) { // Conflict - user with the specified email already exists
+          setIsEmailTaken(true);
+        } else {
+          setIsEmailTaken(false);
+        };
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    };
   };
 
   return (
@@ -346,7 +355,7 @@ export default function Register() {
           { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
           { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
           { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
-          <LargeButton disabled={areInputsInvalid} onClick={handleRegister} label="Register" />
+          <LargeButton disabled={areInputsInvalid} onClick={handleRegister} label="Register" isLoading={isLoading} />
         </div>
       </div>
     </div>

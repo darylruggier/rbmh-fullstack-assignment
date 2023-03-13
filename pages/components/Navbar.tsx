@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 
+import SmallButton from "./SmallButton";
+
 const Navbar: React.FC = () => {
   const { data: session } = useSession();
 
@@ -20,7 +22,7 @@ const Navbar: React.FC = () => {
         </li>
         { session && (
           <li className="lg:pr-8">
-            <button className="bg-rb-red-inactive text-white text-sm font-medium px-8 py-3.5 rounded-md hover:bg-rb-red-active hover:duration-100" onClick={() => handleLogOut()}>Log Out</button>
+            <SmallButton label="Log Out" onClick={handleLogOut} />
           </li>
         )}
       </ul>

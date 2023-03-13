@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 import Head from 'next/head';
@@ -10,7 +9,6 @@ import SmallButton from "../components/SmallButton";
 import LargeButton from "../components/LargeButton";
 
 export default function Profile() {
-  const router = useRouter();
   const { data: session } = useSession();
 
   const [firstName, setFirstName] = useState<string>("");
@@ -26,52 +24,65 @@ export default function Profile() {
   const [error, setError] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (!validPasswordInput || !doPasswordsMatch || error) {
       setSuccessMessage(false);
     };
+    setIsLoading(false);
   }, [validPasswordInput, doPasswordsMatch, error]);
 
   //TODO: when updating profile info and user enters only their current password, do not send post request to update changes
 
   const handleUpdateProfile = async () => {
-    if (!currentPassword) return setValidPasswordInput(false);
-    setValidPasswordInput(true);
+    setIsLoading(true);
+    try {
+      if (!currentPassword) return setValidPasswordInput(false);
 
-    const requestBody = {
-      first_name: firstName,
-      country,
-      new_password: newPassword
-    };
+      setValidPasswordInput(true);
 
-    const res = await fetch(`/api/verify-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ current_password: currentPassword })
-    });
+      const requestBody = {
+        first_name: firstName,
+        country,
+        new_password: newPassword
+      };
 
-    if (res.status === 401) return setDoPasswordsMatch(false);
-    if (res.status === 200) {
-      const res = await fetch(`/api/update-profile`, {
+      const res = await fetch(`/api/verify-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({ current_password: currentPassword })
       });
 
-      if (res.status !== 200) return setError(true);
-      
-      setError(false);
-      setDoPasswordsMatch(true);
-      setSuccessMessage(true);
-      setCurrentPassword("");
-      setNewPassword("");
-      reloadSession();
-    }
-  };
+      if (res.status === 401) {
+        setDoPasswordsMatch(false);
+        return setIsLoading(false);
+      };
 
-  const reloadSession = () => {
-    const event = new Event("visibilitychange");
-    document.dispatchEvent(event);
+      if (res.status === 200) {
+        const res = await fetch(`/api/update-profile`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (res.status !== 200) {
+          setIsLoading(false);
+          return setError(true);
+        } 
+
+        setError(false);
+        setDoPasswordsMatch(true);
+        setSuccessMessage(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setIsLoading(false);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -80,7 +91,7 @@ export default function Profile() {
         <title>Red Bull Media House Case Assignment - Profile</title>
       </Head>
       <Navbar />
-      <div className="pb-6 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
+      <div className="pb-7 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
         {session? (
           <div className="w-5/6 text-center">
             <h1 className="text-5xl font-bold text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
@@ -353,7 +364,7 @@ export default function Profile() {
               { !validPasswordInput && <p className="text-sm text-red-400 pt-2">Please enter a password</p> }
               { error && <p className="text-sm text-red-400 pt-2">Server Error</p> }
               { successMessage && <p className="text-sm text-green-400 pt-2">Profile updated successfully</p> }
-              <LargeButton onClick={handleUpdateProfile} label="Save Changes" />
+              <LargeButton onClick={handleUpdateProfile} label="Save Changes" isLoading={isLoading} />
             </div>
           </div>
         ) : (
