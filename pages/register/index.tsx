@@ -15,23 +15,19 @@ export default function Register() {
 
   // initially setting these to false such that the error message is shown once the button is clicked
   const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true); 
-  const [areInputsValid, setAreInputsValid] = useState<boolean>(true); 
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
 
+  const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
 
   const isInvalidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return !emailRegex.test(email);
   }
 
-  const handleRegister = async () => {
-    if (!email || !password || !confirmPass) {
-      return setAreInputsValid(false);
-    }
+  const areInputsInvalid = !email || !password || !confirmPass || isInvalidEmail(email);
 
-    setAreInputsValid(true);
+  const handleRegister = async () => {
+    if (areInputsInvalid) return;
 
     if (isInvalidEmail(email)) return setIsEmailValid(false);
     setIsEmailValid(true);
@@ -70,7 +66,7 @@ export default function Register() {
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <Navbar />
-      <div className="flex flex-col w-3/4 h-auto justify-start items-center sm:shadow-2xl rounded-lg">
+      <div className="w-2/3 h-auto flex flex-col justify-start items-center sm:shadow-2xl rounded-lg">
         <h1 className="text-3xl lg:text-4xl font-bold pt-9 pb-6 text-center">Create your account</h1>
         <div className="flex flex-col self-center items-center">
           <div className="flex flex-col w-5/6 mt-4">
@@ -83,7 +79,7 @@ export default function Register() {
           </div>
           <div className="flex flex-col w-5/6 mt-4">
             <label className="text-sm font-medium self-start text-[#1A1919]">Country of Residence</label>
-            <select defaultValue={""} className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
+            <select defaultValue="Afghanistan" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
               <option value="">Country</option>
               <option value="Afghanistan">Afghanistan</option>
               <option value="Albania">Albania</option>
@@ -340,13 +336,12 @@ export default function Register() {
               <Image width="20" height="20" alt={showConfirmPass ? "Hide" : "Show"} src={showConfirmPass ? "/show.png" : "/hide.png"} />
             </span>
           </div>
+          { !doPasswordsMatch && <p className="text-sm text-red-400 pt-6">Passwords do not match</p> }
+          { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
+          { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
+          { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
+          <button disabled={areInputsInvalid} className="w-5/6 h-12 rounded-lg mt-8 mb-4 bg-rb-red-active text-white disabled:bg-[#E2E3E5]" onClick={handleRegister}>Register</button>
         </div>
-        { !areInputsValid && <p className="text-xs lg:text-sm text-red-400 pt-6">Please fill in all of the required fields</p> }
-        { !doPasswordsMatch && <p className="text-sm text-red-400 pt-6">Passwords do not match</p> }
-        { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
-        { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
-        { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
-        <button className="w-32 h-12 border-black border rounded-full mt-5 mb-6 active:scale-[.98]" onClick={handleRegister}>Register</button>
       </div>
     </div>
   )
