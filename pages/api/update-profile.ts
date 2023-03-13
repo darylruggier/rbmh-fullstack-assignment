@@ -10,13 +10,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).send({msg: "Unauthorized"});
   }
 
+
   try {
     await prisma.user.update({
       where: { email: session.user.email },
       data: {
         first_name: req.body.first_name,
         country: req.body.country,
-        password: await hashPassword(req.body.new_password, 10),
+        password: req.body.new_password ? await hashPassword(req.body.new_password, 10) : undefined,
       } 
     });
   } catch (err: any) {

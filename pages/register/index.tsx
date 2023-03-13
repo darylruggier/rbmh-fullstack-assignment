@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Image from 'next/image';
+import Head from 'next/head';
 
 export default function Register() {
   const [email, setEmail] = useState<string>("");
@@ -65,21 +66,24 @@ export default function Register() {
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
+      <Head>
+        <title>Red Bull Case Assignment - Register</title>
+      </Head>
       <Navbar />
-      <div className="w-2/3 h-auto flex flex-col justify-start items-center sm:shadow-2xl rounded-lg">
-        <h1 className="text-3xl lg:text-4xl font-bold pt-9 pb-6 text-center">Create your account</h1>
+      <div className="w-2/3 h-auto flex flex-col justify-start items-center sm:shadow-2xl xl:w-1/3">
+        <h1 className="text-2xl lg:text-4xl font-bold pt-9 pb-6 text-center">Join Red Bull Today</h1>
         <div className="flex flex-col self-center items-center">
           <div className="flex flex-col w-5/6 mt-4">
-            <label className="text-sm font-medium self-start text-[#1A1919]">Email</label>
-            <input value={email} type="email" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setEmail(e.target.value)} />
+            <label htmlFor="email" className="text-sm font-medium self-start text-[#1A1919]">Email</label>
+            <input id="email" value={email} type="email" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="flex flex-col w-5/6 mt-4">
-            <label className="text-sm font-medium self-start text-[#1A1919]">First Name</label>
-            <input value={firstName} type="text" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setFirstName(e.target.value)} />
+            <label htmlFor="first-name" className="text-sm font-medium self-start text-[#1A1919]">First Name</label>
+            <input id="first-name" value={firstName} type="text" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setFirstName(e.target.value)} />
           </div>
           <div className="flex flex-col w-5/6 mt-4">
-            <label className="text-sm font-medium self-start text-[#1A1919]">Country of Residence</label>
-            <select defaultValue="Afghanistan" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
+            <label htmlFor="country" className="text-sm font-medium self-start text-[#1A1919]">Country of Residence</label>
+            <select id="country" defaultValue="Afghanistan" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCountry(e.target.value)}>
               <option value="">Country</option>
               <option value="Afghanistan">Afghanistan</option>
               <option value="Albania">Albania</option>
@@ -323,15 +327,15 @@ export default function Register() {
             </select>
           </div>
           <div className="flex flex-col w-5/6 mt-4 relative">
-            <label className="text-sm font-medium self-start text-[#1A1919]">Password</label>
-            <input value={password} type={showPassword ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setPassword(e.target.value)} />
+            <label htmlFor="password" className="text-sm font-medium self-start text-[#1A1919]">Password</label>
+            <input id="password" value={password} type={showPassword ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setPassword(e.target.value)} />
             <span className="w-6 h-6 absolute inset-y-10 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
               <Image width="20" height="20" alt={showPassword ? "Hide" : "Show"} src={showPassword ? "/show.png" : "/hide.png"} />
             </span>
           </div>
           <div className="flex flex-col w-5/6 mt-4 relative">
-            <label className="text-sm font-medium self-start text-[#1A1919]">Confirm Password</label>
-            <input value={confirmPass} type={showConfirmPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setConfirmPass(e.target.value)} />
+            <label htmlFor="confirm-password" className="text-sm font-medium self-start text-[#1A1919]">Confirm Password</label>
+            <input id="confirm-password" value={confirmPass} type={showConfirmPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setConfirmPass(e.target.value)} />
             <span className="w-6 h-6 absolute inset-y-10 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowConfirmPass(!showConfirmPass)}>
               <Image width="20" height="20" alt={showConfirmPass ? "Hide" : "Show"} src={showConfirmPass ? "/show.png" : "/hide.png"} />
             </span>
@@ -340,7 +344,7 @@ export default function Register() {
           { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
           { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
           { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
-          <button disabled={areInputsInvalid} className="w-5/6 h-12 rounded-lg mt-8 mb-4 bg-rb-red-active text-white disabled:bg-[#E2E3E5]" onClick={handleRegister}>Register</button>
+          <button disabled={areInputsInvalid} className="w-5/6 h-12 rounded-lg mt-8 mb-4 bg-rb-red-active text-white disabled:bg-[#E2E3E5] transition duration-200" onClick={handleRegister}>Register</button>
         </div>
       </div>
     </div>
