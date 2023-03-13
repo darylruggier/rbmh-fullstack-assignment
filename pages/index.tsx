@@ -9,6 +9,9 @@ export default function Home() {
   const [password, setPassword] = useState<string>("");
   const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const areInputsInvalid = email === "" || password === "" || !emailRegex.test(email);
+
   const { data: session } = useSession();
   if (session && session.user) {
     return window.open(`/profile`, '_self');
@@ -32,18 +35,21 @@ export default function Home() {
     } catch (error) {
       alert(error);
     }
-
   };
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <div className="flex flex-col w-3/4 h-96 justify-start items-center sm:shadow-2xl rounded-lg">
+      <div className="flex flex-col w-1/2 h-128 justify-start items-center sm:shadow-2xl rounded-lg">
         <Image className="py-8" src="/rbmh-logo.png" width={150} height={150} alt="Red Bull Media House" />
-        <input value={email} type="email" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input value={password} type="password" className="w-3/4 h-12 border-black border rounded-lg mt-4 p-2 px-3" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        { invalidCredentials && <p className="text-sm text-red-400 pt-3">Invalid credentials</p> }
-        <button className="w-32 h-12 border-black border rounded-full mt-3" onClick={(e) => handleLogin(e)}>Login</button>
-        <p className="text-md pt-6 pb-4">Not a user? <Link href="/register" className=""><span className="text-rb-red-active">Sign up!</span></Link></p>
+        <div className="flex flex-col w-5/6 items-center">
+          <label className="text-sm font-medium self-start text-[#1A1919]">Email</label>
+          <input value={email} type="email" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setEmail(e.target.value)} />
+          <label className="text-sm font-medium self-start mt-4 text-[#1A1919]">Password</label>
+          <input value={password} type="password" className="w-full h-12 border-[#a0a1a1] border rounded-lg mt-2 px-4 py-6" onChange={(e) => setPassword(e.target.value)} />
+          { invalidCredentials && <p className="text-sm text-red-400 pt-3">Invalid credentials</p> }
+          <button disabled={areInputsInvalid} className="w-full h-12 rounded-lg mt-3 bg-rb-red-active text-white disabled:bg-[#E2E3E5]" onClick={(e) => handleLogin(e)}>Login</button>
+          <p className="text-md pt-6 pb-4">Not a user? <Link href="/register" className=""><span className="text-rb-red-active">Sign up!</span></Link></p>
+        </div>
       </div>
     </div>
   )
