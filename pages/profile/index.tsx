@@ -40,9 +40,9 @@ export default function Profile() {
 
     const requestBody = {
       first_name: firstName,
-      country
+      country,
+      new_password: newPassword
     };
-    if (!!newPassword) requestBody.first_name = newPassword; // appending newPassword to the requestBody only if it's non-empty
 
     const res = await fetch(`/api/verify-password`, {
       method: "POST",
