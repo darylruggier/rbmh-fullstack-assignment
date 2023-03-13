@@ -6,7 +6,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import Navbar from "../components/Navbar";
-import Button from "../components/Button";
+import SmallButton from "../components/SmallButton";
+import LargeButton from "../components/LargeButton";
 
 export default function Profile() {
   const router = useRouter();
@@ -79,10 +80,10 @@ export default function Profile() {
         <title>Red Bull Media House Case Assignment - Profile</title>
       </Head>
       <Navbar />
-      <div className="flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
+      <div className="pb-6 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
         {session? (
           <div className="w-5/6 text-center">
-            <h1 className="text-5xl font-normal text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
+            <h1 className="text-5xl font-bold text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
             <p className="text-md font-light mt-2">{session.user?.email}</p>
             <div className="flex flex-col mt-8">
               <div className="flex flex-col w-full">
@@ -352,13 +353,13 @@ export default function Profile() {
               { !validPasswordInput && <p className="text-sm text-red-400 pt-2">Please enter a password</p> }
               { error && <p className="text-sm text-red-400 pt-2">Server Error</p> }
               { successMessage && <p className="text-sm text-green-400 pt-2">Profile updated successfully</p> }
-              <button className="w-full h-12 rounded-md mt-6 mb-6 bg-rb-red-active text-white disabled:bg-[#E2E3E5] transition duration-200" onClick={handleUpdateProfile}>Save Changes</button>
+              <LargeButton onClick={handleUpdateProfile} label="Save Changes" />
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center">
             <p className="text-2xl mt-8">You are not logged in!</p>
-            <Link href="/"><Button label="Log In" /></Link>
+            <Link href="/"><SmallButton label="Log In" /></Link>
           </div>
         )}
       </div>

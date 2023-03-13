@@ -4,6 +4,8 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 
+import LargeButton from './components/LargeButton';
+
 
 export default function Home() {
   const [email, setEmail] = useState<string>("");
@@ -61,7 +63,7 @@ export default function Home() {
             <span className="text-sm mt-2 font-medium self-start text-[#737477] hover:cursor-pointer"><Link href="/forgot-password">Forgot Password?</Link></span>
           </div>
           { invalidCredentials && <p className="text-sm text-red-400 pt-3">Invalid credentials</p> }
-          <button disabled={areInputsInvalid} className="w-full h-12 rounded-md mt-6 bg-rb-red-active text-white disabled:bg-[#E2E3E5] transition duration-200" onClick={(e) => handleLogin(e)}>Login</button>
+          <LargeButton disabled={areInputsInvalid} label="Login" onClick={(e) => handleLogin(e)} />
           <p className="text-md pt-6 pb-4">Not a user? <Link href="/register" className=""><span className="text-rb-red-active">Sign up!</span></Link></p>
         </div>
       </div>
