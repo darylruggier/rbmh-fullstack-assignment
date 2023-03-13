@@ -65,14 +65,14 @@ export default function Register() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center">
+    <div className="h-screen w-screen flex flex-col items-center">
       <Head>
         <title>Red Bull Case Assignment - Register</title>
       </Head>
       <Navbar />
-      <div className="w-5/6 h-auto flex flex-col justify-start items-center sm:shadow-2xl sm:mt-4 xl:w-1/3">
+      <div className="w-5/6 h-auto flex flex-col justify-start items-center rounded-xl sm:shadow-2xl sm:mt-4 xl:w-1/3">
         <h1 className="text-2xl lg:text-4xl font-bold text-center sm:mt-8">Join Red Bull Today</h1>
-        <div className="flex flex-col self-center items-center">
+        <div className="w-5/6 flex flex-col self-center items-center">
           <div className="flex flex-col w-5/6 mt-4">
             <label htmlFor="email" className="text-sm font-medium self-start text-[#1A1919]">Email</label>
             <input id="email" value={email} type="email" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setEmail(e.target.value)} />
@@ -344,7 +344,7 @@ export default function Register() {
           { isEmailTaken && <p className="text-sm text-red-400 pt-6">Email is already taken</p> }
           { !isEmailValid && <p className="text-sm text-red-400 pt-6">Email entered is not valid</p> }
           { accountSuccessfullyCreated && <p className="text-sm text-green-400 pt-6">Account created!</p> }
-          <button disabled={areInputsInvalid} className="w-5/6 h-12 rounded-lg mt-8 mb-4 bg-rb-red-active text-white disabled:bg-[#E2E3E5] transition duration-200" onClick={handleRegister}>Register</button>
+          <button disabled={areInputsInvalid} className="w-5/6 h-12 rounded-lg my-6 bg-rb-red-active text-white disabled:bg-[#E2E3E5] transition duration-200" onClick={handleRegister}>Register</button>
         </div>
       </div>
     </div>

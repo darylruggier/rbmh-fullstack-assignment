@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
@@ -15,6 +16,9 @@ export default function Profile() {
   const [country, setCountry] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
+
+  const [showNewPass, setShowNewPass] = useState<boolean>(false);
+  const [showCurrentPass, setShowCurrentPass] = useState<boolean>(false);
 
   const [validPasswordInput, setValidPasswordInput] = useState<boolean>(true);
   const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true);
@@ -330,13 +334,19 @@ export default function Profile() {
                   <option value="Zimbabwe">Zimbabwe</option>
                 </select>
               </div>
-              <div className="flex flex-col w-full">
+              <div className="flex flex-col w-full relative">
                 <label htmlFor="current-password" className="text-sm font-medium self-start text-[#1A1919] mt-4">Current Password</label>
-                <input id="current-password" value={currentPassword} type="password" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCurrentPassword(e.target.value)} />
+                <input id="current-password" value={currentPassword} type={showCurrentPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setCurrentPassword(e.target.value)} />
+                <span className="w-6 h-6 absolute inset-y-14 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowCurrentPass(!showCurrentPass)}>
+                  <Image width="20" height="20" alt={showCurrentPass ? "Hide" : "Show"} src={showCurrentPass ? "/show.png" : "/hide.png"} />
+                </span>
               </div>
-              <div className="flex flex-col w-full">
+              <div className="flex flex-col w-full relative">
                 <label htmlFor="new-password" className="text-sm font-medium self-start text-[#1A1919] mt-4">New Password</label>
-                <input id="new-password" value={newPassword} type="password" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setNewPassword(e.target.value)} />
+                <input id="new-password" value={newPassword} type={showNewPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setNewPassword(e.target.value)} />
+                <span className="w-6 h-6 absolute inset-y-14 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowNewPass(!showNewPass)}>
+                  <Image width="20" height="20" alt={showNewPass ? "Hide" : "Show"} src={showNewPass ? "/show.png" : "/hide.png"} />
+                </span>
               </div>
               { !doPasswordsMatch && <p className="text-sm text-red-400 pt-2">Password entered is incorrect</p> }
               { !validPasswordInput && <p className="text-sm text-red-400 pt-2">Please enter a password</p> }
