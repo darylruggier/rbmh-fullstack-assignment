@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Image from 'next/image';
 import Head from 'next/head';
@@ -11,16 +11,19 @@ export default function Register() {
   const [country, setCountry] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
+  const [userHasTypedPassword, setUserHasTypedPassword] = useState<boolean>(false);
 
   const [isEmailTaken, setIsEmailTaken] = useState<boolean>(false);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [accountSuccessfullyCreated, setAccountSuccessfullyCreated] = useState<boolean>(false);
 
-  // initially setting these to false such that the error message is shown once the button is clicked
+  // initially setting these to their optimal state such that the error message is shown once the button is clicked
   const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true); 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState<boolean>(false);
+
+  const [dynamicPasswordPrompt, setDynamicPasswordPrompt] = useState<string>("Password");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -29,7 +32,12 @@ export default function Register() {
     return !emailRegex.test(email);
   }
 
-  const areInputsInvalid = !email || !password || !confirmPass || isInvalidEmail(email);
+  const isInvalidPassword = (password: string) => {
+    const safePasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&^_-]{8,}$/;
+    return !safePasswordRegex.test(password);
+  };
+
+  const areInputsInvalid = !email || !password || !confirmPass || isInvalidEmail(email) || isPasswordInvalid;
 
   const handleRegister = async () => {
     setIsLoading(true);
@@ -74,6 +82,25 @@ export default function Register() {
       setIsLoading(false);
     };
   };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserHasTypedPassword(true);
+    setPassword(e.target.value);
+  }
+
+  useEffect(() => {
+    if (!userHasTypedPassword) return setDynamicPasswordPrompt("Password");
+    if (!password) { // user has typed and the password field is empty
+      setDynamicPasswordPrompt("Password is required");
+      setIsPasswordInvalid(true);
+    } else if (password.length < 5) {
+      setDynamicPasswordPrompt("Password must be at least 5 characters");
+      setIsPasswordInvalid(true);
+    } else {
+      setDynamicPasswordPrompt("Create Password");
+      setIsPasswordInvalid(false);
+    }
+  }, [password]);
 
   return (
     <div className="h-screen w-screen flex flex-col items-center">
@@ -338,8 +365,8 @@ export default function Register() {
             </select>
           </div>
           <div className="flex flex-col w-full mt-4 relative">
-            <label htmlFor="password" className="text-sm font-medium self-start text-[#1A1919]">Password</label>
-            <input id="password" value={password} type={showPassword ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setPassword(e.target.value)} />
+            <label htmlFor="password" className="text-sm font-medium self-start text-[#1A1919]">{dynamicPasswordPrompt}</label>
+            <input id="password" value={password} type={showPassword ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => handlePasswordChange(e)} />
             <span className="w-6 h-6 absolute inset-y-10 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
               <Image width="20" height="20" alt={showPassword ? "Hide" : "Show"} src={showPassword ? "/show.png" : "/hide.png"} />
             </span>
