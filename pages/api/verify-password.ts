@@ -1,6 +1,5 @@
 import { getSession } from "next-auth/react";
 import { prisma } from "../../lib/prisma";
-import { hashPassword } from "../../lib/hashAndSalt";
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 

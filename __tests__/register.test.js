@@ -1,5 +1,5 @@
-import { hashPassword } from '../lib/hashAndSalt';
 import register from '../pages/api/register';
+import { prisma } from '../lib/prisma';
 
 describe('Register', () => {
   const email = 'test@example.com';

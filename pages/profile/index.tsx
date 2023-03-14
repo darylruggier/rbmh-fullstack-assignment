@@ -31,8 +31,6 @@ export default function Profile() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  //TODO: when updating profile info and user enters only their current password, do not send post request to update changes
-
   const handleUpdateProfile = async () => {
     setIsLoading(true);
     try {
