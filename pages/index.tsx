@@ -19,12 +19,10 @@ export default function Home() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const areInputsInvalid = email === "" || password === "" || !emailRegex.test(email);
 
-
   const { data: session } = useSession();
   if (session && session.user) {
     return window.open(`/profile`, '_self');
   }
-
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -53,7 +51,7 @@ export default function Home() {
       <Head>
         <title>Red Bull Media House Case Assignment - Login</title>
       </Head>
-      <div className="flex flex-col w-5/6 h-128 justify-start items-center rounded-xl sm:shadow-2xl lg:w-1/2">
+      <div className="flex flex-col w-5/6 h-128 justify-start items-center rounded-xl sm:shadow-2xl lg:w-1/2 2xl:w-1/3">
         <Image priority className="py-8" src="/rbmh-logo.png" width={150} height={150} alt="Red Bull Media House" />
         <div className="flex flex-col w-5/6 items-center">
           <div className="flex flex-col w-full">

@@ -108,7 +108,7 @@ export default function Register() {
         <title>Red Bull Case Assignment - Register</title>
       </Head>
       <Navbar />
-      <div className="w-5/6 h-auto pb-6 flex flex-col justify-start items-center rounded-xl sm:shadow-2xl sm:mt-4 xl:w-1/3">
+      <div className="w-5/6 h-auto pb-6 flex flex-col justify-start items-center rounded-xl sm:shadow-2xl sm:mt-4 xl:w-1/3 2xl:w-1/4 2xl:mt-12">
         <h1 className="text-2xl lg:text-4xl font-bold text-center sm:mt-8">Join Red Bull Today</h1>
         <div className="w-5/6 flex flex-col self-center items-center">
           <div className="flex flex-col w-full mt-4">

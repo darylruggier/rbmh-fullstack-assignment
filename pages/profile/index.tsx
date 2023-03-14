@@ -1,14 +1,15 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from "next/router";
 
 import Navbar from "../components/Navbar";
 import SmallButton from "../components/SmallButton";
 import LargeButton from "../components/LargeButton";
 
 export default function Profile() {
+  const router = useRouter();
   const { data: session } = useSession();
 
   const [firstName, setFirstName] = useState<string>("");
@@ -20,12 +21,10 @@ export default function Profile() {
   const [showCurrentPass, setShowCurrentPass] = useState<boolean>(false);
 
   const [userHasTypedCurrentPassword, setUserHasTypedCurrentPassword] = useState<boolean>(false);
-  const [userHasTypedNewPassword, setUserHasTypedNewPassword] = useState<boolean>(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState<boolean>(false);
   const [dynamicCurrentPasswordPrompt, setDynamicCurrentPasswordPrompt] = useState<string>("Current Password");
   const [dynamicNewPasswordPrompt, setDynamicNewPasswordPrompt] = useState<string>("New Password");
 
-  const [validPasswordInput, setValidPasswordInput] = useState<boolean>(true);
   const [doPasswordsMatch, setDoPasswordsMatch] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
@@ -37,10 +36,6 @@ export default function Profile() {
   const handleUpdateProfile = async () => {
     setIsLoading(true);
     try {
-      if (!currentPassword) return setValidPasswordInput(false);
-
-      setValidPasswordInput(true);
-
       const requestBody = {
         first_name: firstName,
         country,
@@ -75,7 +70,6 @@ export default function Profile() {
         setSuccessMessage(true);
         setCurrentPassword("");
         setNewPassword("");
-        setIsLoading(false);
       }
     } catch (e) {
       console.error(e);
@@ -90,11 +84,6 @@ export default function Profile() {
     setCurrentPassword(e.target.value);
   }
 
-  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserHasTypedNewPassword(true);
-    setNewPassword(e.target.value);
-  }
-
   const areInputsInvalid = !currentPassword || isPasswordInvalid;
 
   useEffect(() => {
@@ -103,7 +92,7 @@ export default function Profile() {
   }, [currentPassword]);
 
   useEffect(() => {
-    if (!userHasTypedNewPassword || !newPassword && !currentPassword) {
+    if (!newPassword) {
       return setDynamicNewPasswordPrompt("New Password");
     }
 
@@ -117,11 +106,11 @@ export default function Profile() {
   }, [newPassword]);
 
   useEffect(() => {
-    if (!validPasswordInput || !doPasswordsMatch || error) {
+    if (!doPasswordsMatch || error) {
       setSuccessMessage(false);
     };
     setIsLoading(false);
-  }, [validPasswordInput, doPasswordsMatch, error]);
+  }, [doPasswordsMatch, error]);
 
 
   return (
@@ -130,12 +119,12 @@ export default function Profile() {
         <title>Red Bull Media House Case Assignment - Profile</title>
       </Head>
       <Navbar />
-      <div className="pb-7 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-16 md:w-1/2">
-        {session? (
+      {session? (
+        <div className="pb-7 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-12 md:w-1/2 2xl:w-1/3 2xl:mt-24">
           <div className="w-5/6 text-center">
             <h1 className="text-5xl font-bold text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
             <p className="text-md font-light mt-2">{session.user?.email}</p>
-            <div className="flex flex-col mt-8">
+            <div className="flex flex-col mt-8 2xl:mt-12">
               <div className="flex flex-col w-full">
                 <label htmlFor="first-name" className="text-sm font-medium self-start text-[#1A1919]">First Name</label>
                 <input id="first-name" defaultValue={session.user.first_name ?? firstName} type="text" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setFirstName(e.target.value)} />
@@ -394,25 +383,25 @@ export default function Profile() {
               </div>
               <div className="flex flex-col w-full relative">
                 <label htmlFor="new-password" className="text-sm font-medium self-start text-[#1A1919] mt-4">{dynamicNewPasswordPrompt}</label>
-                <input id="new-password" value={newPassword} type={showNewPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => handleNewPasswordChange(e)} />
+                <input id="new-password" value={newPassword} type={showNewPass ? "text" : "password"} className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setNewPassword(e.target.value)} />
                 <span className="w-6 h-6 absolute inset-y-14 right-0 flex items-center mr-4 hover:cursor-pointer" onClick={() => setShowNewPass(!showNewPass)}>
                   <Image width="20" height="20" alt={showNewPass ? "Hide" : "Show"} src={showNewPass ? "/show.png" : "/hide.png"} />
                 </span>
               </div>
               { !doPasswordsMatch && <p className="text-sm text-red-400 pt-2">Password entered is incorrect</p> }
-              { !validPasswordInput && <p className="text-sm text-red-400 pt-2">Please enter a password</p> }
               { error && <p className="text-sm text-red-400 pt-2">Server Error</p> }
               { successMessage && <p className="text-sm text-green-400 pt-2">Profile updated successfully</p> }
               <LargeButton disabled={areInputsInvalid} onClick={handleUpdateProfile} label="Save Changes" isLoading={isLoading} />
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-2xl mt-8">You are not logged in!</p>
-            <Link href="/"><SmallButton label="Log In" /></Link>
-          </div>
-        )}
       </div>
+      ) : (
+      <div className="flex flex-col justify-center m-auto w-auto items-center text-center">
+        <h1 className="text-xl md:text-2xl">Whoa there! Hold up.<br />Looks like you need some wings to access this page.</h1>
+        <br />
+        <SmallButton label="Login" onClick={() => router.push("/")} />
+      </div>
+    )}
     </div>
   )
 };
