@@ -33,7 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           country: user.country,
         });
       }
-
     } catch (err: any) {
       return res.status(500).json({ msg: err.message });
     }

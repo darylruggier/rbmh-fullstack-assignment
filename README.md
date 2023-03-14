@@ -26,6 +26,7 @@ This app includes the following features:
 * Password safety check with regular expressions
 * Integration with Prisma ORM for database management
 * Integration with PlanetScale for database hosting and scaling
+* Unit Testing of the Next API endpoints via. Jest
 
 ## Technologies
 
@@ -34,6 +35,7 @@ This app includes the following features:
 * 🔐 Next-Auth - An authentication library for Next.js applications.
 * 🔼 Prisma - A modern ORM for building type-safe and scalable database applications.
 * 🪐 PlanetScale - A cloud-native database platform for scaling MySQL.
+* 🃏 Jest - A JavaScript testing framework for unit testing, integration testing, and snapshot testing.
 
 ## Possible Improvements
 
@@ -42,3 +44,4 @@ Below are improvements which would have been made but couldn't, due to certain l
 * Dark mode implementation via. next-themes
 * Usage of a UI library
 * Implementing login / register as a singular flow (similarly to how it's done on Redbull.com)
+* Proper session data updating once profile is updated (limited due to NextAuth not providing updateSession functionality at the time of writing)

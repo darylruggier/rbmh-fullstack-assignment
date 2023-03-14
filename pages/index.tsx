@@ -27,6 +27,7 @@ export default function Home() {
 
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const login = await signIn('credentials', {
         redirect: false,

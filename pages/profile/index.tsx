@@ -80,6 +80,7 @@ export default function Profile() {
     } catch (e) {
       console.error(e);
     } finally {
+      setUserHasTypedCurrentPassword(false);
       setIsLoading(false);
     }
   };
