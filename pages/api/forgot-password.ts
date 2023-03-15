@@ -25,19 +25,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     // check if user has non-expired token
-    const existingToken = await prisma.verificationToken.findFirst({
-      where: {
-        userId: user.id,
-        expires: {
-          gte: new Date()
-        }
-      },
-    });
-
-
-    if (existingToken) {
-      return res.status(409).json({ msg: "Non-expired token already exists" });
-    }
+    // const existingToken = await prisma.verificationToken.findFirst({
+    //   where: {
+    //     userId: user.id,
+    //     expires: {
+    //       gte: new Date()
+    //     }
+    //   },
+    // });
+    //
+    //
+    // if (existingToken) {
+    //   return res.status(409).json({ msg: "Non-expired token already exists" });
+    // }
 
     const token = await prisma.verificationToken.create({
       data: {
