@@ -1,21 +1,26 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../lib/prisma';
 import { hashPassword } from '../../lib/hashAndSalt';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email(),
+  first_name: z.string().optional(),
+  country: z.string().optional(),
+  password: z.string().min(5, { message: "Password must be at least 5 characters long" }),
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    if (!req.body.email || !req.body.password) {
-      return res.status(400).json({ msg: "User creation requires email, first_name, country and password to be not null" });
-    };
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(req.body.email)) return res.status(400).json({ msg: "Email is not valid" });
-
     try {
+      const { email, first_name, country, password } = schema.parse(req.body);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) return res.status(400).json({ msg: "Email is not valid" });
+
       // checking if the user with the specified email already exists
       const existingUser = await prisma.user.findUnique({
         where: {
-          email: req.body.email
+          email: email
         },
       });
 
@@ -25,10 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await prisma.user.create({
         data: {
-          email: req.body.email,
-          first_name: req.body.first_name ?? null,
-          country: req.body.country ?? null,
-          password: await hashPassword(req.body.password, 10),
+          email: email,
+          first_name: first_name ?? null,
+          country: country ?? null,
+          password: await hashPassword(password, 10),
         }
       });
 
@@ -38,5 +43,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   } else {
     return res.status(405).json({ msg: "Method not allowed" });
-  }
-}
+  };
+};

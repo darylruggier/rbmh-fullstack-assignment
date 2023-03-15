@@ -1,14 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../lib/prisma';
 import bcrypt from 'bcrypt';
-import { hashPassword } from '../../lib/hashAndSalt';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string()
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
+      const { email, password } = schema.parse(req.body);
+
       const user = await prisma.user.findUnique({
         where: {
-          email: req.body.email,
+          email: email
         }
       });
 
@@ -19,13 +26,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let isPasswordValid = false;
       if (user.password) {
-        isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
+        isPasswordValid = bcrypt.compareSync(password, user.password);
       };
 
       if (!isPasswordValid) {
         return res.status(401).json({ msg: "Invalid email or password" });
       } else {
-        // set session
         return res.status(200).json({ 
           id: user.id,
           email: user.email,
