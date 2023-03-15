@@ -38,21 +38,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // if (existingToken) {
     //   return res.status(409).json({ msg: "Non-expired token already exists" });
     // }
-
-    const token = await prisma.verificationToken.create({
-      data: {
-        token: Math.random().toString(36).substring(7),
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
-        expires: new Date(new Date().getTime() + 60 * 60 * 1000), // expires in 1 hour
-      },
-    });
-
+    //
+    // const token = await prisma.verificationToken.create({
+    //   data: {
+    //     token: Math.random().toString(36).substring(7),
+    //     user: {
+    //       connect: {
+    //         id: user.id,
+    //       },
+    //     },
+    //     expires: new Date(new Date().getTime() + 60 * 60 * 1000), // expires in 1 hour
+    //   },
+    // });
+    //
     // send email with token
-    await sendPasswordResetEmail(email, token);
+    // await sendPasswordResetEmail(email, token);
     return res.status(200).json({ msg: "Token created successfully" });
   } catch (error: any) {
     return res.status(400).json({ msg: error.message });
