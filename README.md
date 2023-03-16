@@ -34,7 +34,7 @@ This app includes the following features:
 
 As a fun little side-task, another branch was created to emulate the login / register flow found on RedBull.com, thus making the login / register experience into a single page, rather than two for each feature.
 
-In addition, *Forgot Password* functionality is implemented and may be accessible on the master branch. Implementing this was quite fun and straight-forward! The sendgrid[https://sendgrid.com] Email Delivery API is used to send password reset emails, in which a token is sent to the user to reset their password.
+In addition, *Forgot Password* functionality is implemented and may be accessible on the master branch. Implementing this was quite fun and straight-forward! The [sendgrid](https://sendgrid.com) Email Delivery API is used to send password reset emails, in which a token is sent to the user to reset their password.
 
 ## Technologies
 
