@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     // check if user has non-expired token
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const existingToken = await prisma.verificationToken.findFirst({
       where: {
         userId: user.id,
