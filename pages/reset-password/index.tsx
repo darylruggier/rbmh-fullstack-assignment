@@ -24,6 +24,7 @@ export default function ResetPasswordPage({ token }: Props) {
 
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
@@ -46,6 +47,11 @@ export default function ResetPasswordPage({ token }: Props) {
   const handleResetPassword = async () => {
     setIsLoading(true);
     try {
+      if (password !== confirmPassword) {
+        return setPasswordsMatch(false);
+      };
+      setPasswordsMatch(true);
+
       const response = await fetch("/api/reset-password", {
         method: "POST",
         headers: {
@@ -121,6 +127,7 @@ export default function ResetPasswordPage({ token }: Props) {
           </div>
           {successMessage && <p className="text-sm font-medium text-green-500 mt-2">Password reset successfully!</p>}
           {tokenExpired && <p className="text-sm font-medium text-red-500 mt-2">Token expired!</p>}
+          { !passwordsMatch && <p className="text-sm font-medium text-red-500 mt-2">Passwords do not match!</p>}
           {tokenNotFound && <p className="text-sm font-medium text-red-500 mt-2">Token not found</p>}
           {errorMessage && <p className="text-sm font-medium text-red-500 mt-2">Something went wrong!</p>}
           <LargeButton label="Reset Password" onClick={handleResetPassword} isLoading={isLoading} disabled={isPasswordInvalid} />
