@@ -53,5 +53,5 @@ Below are improvements which would have been made but couldn't, due to certain l
 
 * Dark mode implementation via. next-themes
 * Usage of a UI library
-* Proper session data updating once profile is updated (limited due to NextAuth not providing updateSession functionality at the time of writing)
+* Proper session data updating once profile is updated (limited due to NextAuth not providing updateSession functionality at the time of writing, thus to see updated profile details you'd need to log out and log back in)
 * Increased password security (i.e. using a safe password regex or similar, rather than just enforcing passwords to be >=5 characters)
