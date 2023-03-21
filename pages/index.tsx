@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from "next/link";
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 
@@ -8,6 +9,8 @@ import LargeButton from './components/LargeButton';
 
 
 export default function Home() {
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -21,7 +24,8 @@ export default function Home() {
 
   const { data: session } = useSession();
   if (session && session.user) {
-    return window.open(`/profile`, '_self');
+    router.replace('/profile');
+    return null; // important! otherwise it will attempt to the page and then redirect
   }
 
   const handleLogin = async () => {
