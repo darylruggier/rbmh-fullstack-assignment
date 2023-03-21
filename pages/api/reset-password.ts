@@ -31,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     if (existingToken.expires < new Date()) {
-      console.log("token expires", existingToken.expires, "new date", new Date(), "token expired", existingToken.expires < new Date());
       return res.status(400).json({ message: "Token expired" });
     };
 

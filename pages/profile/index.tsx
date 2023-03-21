@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Head from 'next/head';
 import Image from 'next/image';
@@ -7,10 +7,25 @@ import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 import SmallButton from "../components/SmallButton";
 import LargeButton from "../components/LargeButton";
+import { GetServerSideProps } from "next";
 
-export default function Profile() {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const session = await getSession(context);
+  const user = session?.user; // returning session seems to not work - returning the user however, does.
+
+  return {
+    props: {
+      user
+    }
+  }
+}
+
+interface Props {
+  user?: any
+}
+
+export default function Profile({ user }: Props) {
   const router = useRouter();
-  const { data: session } = useSession();
 
   const [firstName, setFirstName] = useState<string>("");
   const [country, setCountry] = useState<string>("");
@@ -117,19 +132,19 @@ export default function Profile() {
         <title>Red Bull Media House Case Assignment - Profile</title>
       </Head>
       <Navbar />
-      {session? (
+      {user? (
         <div className="pb-7 flex flex-col w-full h-auto justify-start items-center rounded-xl sm:w-5/6 sm:shadow-xl md:mt-12 md:w-1/2 2xl:w-1/3 2xl:mt-24">
           <div className="w-5/6 text-center">
-            <h1 className="text-5xl font-bold text-black sm:text-[3rem] mt-6">{ session?.user?.first_name ? `Hey, ${session.user.first_name}!` : "Profile"}</h1>
-            <p className="text-md font-light mt-2">{session.user?.email}</p>
+            <h1 className="text-5xl font-bold text-black sm:text-[3rem] mt-6">{ user?.first_name ? `Hey, ${user.first_name}!` : "Profile"}</h1>
+            <p className="text-md font-light mt-2">{user?.email}</p>
             <div className="flex flex-col mt-8 2xl:mt-12">
               <div className="flex flex-col w-full">
                 <label htmlFor="first-name" className="text-sm font-medium self-start text-[#1A1919]">First Name</label>
-                <input id="first-name" defaultValue={session.user.first_name ?? firstName} type="text" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setFirstName(e.target.value)} />
+                <input id="first-name" defaultValue={user.first_name ?? firstName} type="text" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 py-6" onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="flex flex-col w-full">
                 <label htmlFor="country" className="text-sm font-medium self-start text-[#1A1919] mt-4">Country</label>
-                <select defaultValue={session.user.country ?? "default"} id="country" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 appearance-none" onChange={(e) => setCountry(e.target.value)}>
+                <select defaultValue={user.country ?? "default"} id="country" className="w-full h-12 border-[#a0a1a1] black border rounded-lg mt-2 px-4 appearance-none" onChange={(e) => setCountry(e.target.value)}>
                   <option value="default">Country</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Albania">Albania</option>
